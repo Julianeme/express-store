@@ -105,31 +105,41 @@ router.post('/', validatorHandler(createProductSchema, 'body'),
 router.put('/:id',
   validatorHandler(getProductSchema, 'params'),
   validatorHandler(updateProductSchema, 'body'),
-    async (req, res, next)=>{
-      try{
-      const productID = req.params.id
-      const body = req.body;
-      const updatedProduct = await service.update(productID, body)
-      res.json(updatedProduct)
-    } catch(err){
-      next(err)
-    }
+  async (req, res, next)=>{
+    try{
+    const productID = req.params.id
+    const body = req.body;
+    const updatedProduct = await service.update(productID, body)
+    res.json(updatedProduct)
+  } catch(err){
+    next(err)
+  }
 })
 
-router.patch('/:productId', (req, res)=>{
-  const body = req.body;
+router.patch('/:productId',
+validatorHandler(getProductSchema, 'params'),
+async (req, res)=>{
+try {  const body = req.body;
   const { productId } = req.params
   res.json({
     message: ' Product Partial Update Successful ',
     data: body,
     productId
-  })
+  })} catch (err){
+    next(err)
+  }
 })
 
-router.delete('/:productId', (req, res)=>{
-  const { productId } = req.params
+router.delete('/:productId',
+validatorHandler(getProductSchema, 'params'),
+async (req, res)=>{
+  try{
+    const { productId } = req.params
   const productToDelete = service.delete(productId)
   res.json({productToDelete})
+  } catch (err){
+    next(err)
+  }
 })
 
 module.exports = router;
