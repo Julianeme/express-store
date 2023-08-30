@@ -29,6 +29,15 @@ const options = {
 //a peticiones desde cualquier origen, esto es util para api publicas, no internas
 app.use(cors(options))
 
+
+app.get('/', (req, res) => {
+  res.send(`
+  <h1>Express study home page</h1>
+  <img src="../resources/images/bg_image_fullHD.jpg" alt="placeholder image" />
+  `)
+});
+
+
 // utilizamos el routerApi
 routerApiV1(app)
 routerApiV2(app)
