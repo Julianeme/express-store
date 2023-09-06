@@ -1,0 +1,33 @@
+#yml version
+version: '3.3'
+
+#here we specify the services to run, we can name it anywa, but it is a
+#good practice to name it after the service it is running, for example:
+#to run a DB we can name it 'myDB' or similar, but its recommended to
+#name it according to the db it is running on
+services:
+  postgres:
+    image: postgres:13
+    container_name: my_container_db
+    #environmet variables we want to use and its value
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=ajulian
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5432:5432
+    #the location of the volume depends on the specific DB we are using
+    # we can check on https://hub.docker.com/ and DB name, in this case:
+    #https://hub.docker.com/_/postgres  scroll down to PGDATA
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+#to run this services:
+ # docker-compose up -d service_name, in this case postgres, -d is for detached (run behind)
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      -  5050:80

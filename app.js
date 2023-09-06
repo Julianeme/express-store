@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 //body una respuesta a un requesti tipo POST por ejemplo
 app.use(express.json())
 
-// ensure the server is set up to serve static files correctly.
+// make sure the server is set up to serve static files correctly.
 app.use(express.static('public'));
 
 //podemos crear una lista de sitios permitidos para hacer peticiones a nuestra app asi:
