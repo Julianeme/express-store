@@ -21,48 +21,13 @@ const service = new ProductsService();
 router.get('/', async (req, res) => {
   try {
     const products = await service.find();
-
-    // Generate the HTML list
-    const productListHTML = generateProductListHTML(products);
-
     // Sending the HTML response
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Product List</title>
-      </head>
-      <body>
-        <h1>Product List</h1>
-        ${productListHTML}
-      </body>
-      </html>
-    `);
+    res.send(products);
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
   }
 });
-
-function generateProductListHTML(products) {
-  // Create HTML elements for each product
-  const productItems = products.map(product => `
-    <div>
-      <h2>${product.name}</h2>
-      <p>Price: $${product.price}</p>
-      <img src="${product.image}" alt="${product.name}" width="100">
-    </div>
-  `).join('');
-
-  // Wrap the product items in a container
-  const productListHTML = `
-    <div>
-      ${productItems}
-    </div>
-  `;
-
-  return productListHTML;
-}
 
 //Este endpoint chocaria con el que le sigue, para evitarlo, se ponen los filtros especificos como
 //este antes de los dinamicos como 'products/:id'

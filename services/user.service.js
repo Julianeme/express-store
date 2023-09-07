@@ -1,7 +1,9 @@
 const boom = require('@hapi/boom');
 const pool = require('../libs/postgres.pool');
+const { models } = require('../libs/sequelize');
+// since we are using sequelize , getConnection is not longer required
+// const getConnection = require('../libs/postgres');
 
-const getConnection = require('../libs/postgres');
 
 class UserService {
   constructor() {
@@ -15,9 +17,8 @@ class UserService {
   }
 
   async find() {
-    const query = 'SELECT * FROM tasks';
-    const { rows } = await this.pool.query(query);
-    return rows;
+    const response = models.User.findAll();
+    return response;
   }
 
 

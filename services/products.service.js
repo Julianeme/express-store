@@ -1,30 +1,19 @@
 const { faker } = require('@faker-js/faker')
 const boom = require('@hapi/boom')
-const pool = require('../libs/postgres.pool')
+// We wont longer use pool instead we will used sequelize ORM
+// const pool = require('../libs/postgres.pool')
+// const sequelize = require('../libs/sequelize');
+const { models } = require('../libs/sequelize');
 
 class ProductsService{
 
   constructor(){
-    this.products = [];
-    this.generate();
-    this.pool = pool;
-    this.pool.on('error', (err) => console.error(err));
+    // when using sequelize we wont need to use pool
+    // this.pool = pool;
+    // this.pool.on('error', (err) => console.error(err));
   }
 
-  generate(){
-    const size = 100;
-    for (let index = 0; index < size; index++){
-      this.products.push({
-      id : faker.string.uuid(),
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.url(),
-      blocked: faker.datatype.boolean()
-    })
-    }
-  }
-
-  async create(data){
+    async create(data){
     const newProduct = {
       id : faker.string.uuid(),
       ...
@@ -35,9 +24,11 @@ class ProductsService{
   }
 
   async find(){
-    const query = 'SELECT * FROM tasks'
-    const { rows } = await this.pool.query(query)
-    return rows;
+    // when we want to use a sql query we will use sequelize.query
+    //const query = 'SELECT * FROM tasks'
+    //const [data] = await sequelize.query(query)
+    const response = await models.Product.findAll()
+    return response;
   }
 
   async findOne(id){
