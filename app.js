@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors')
 const routerApiV1 = require('./routes/v1Routes')
 const routerApiV2 = require('./routes/v2Routes')
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler')
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
+const { handleSQLError } = require('./middlewares/queryError.handler');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -48,6 +49,7 @@ routerApiV2(app)
 //el uso del middleware se da despues del ruteo
 //el orden en el que se escriben es el orden en el que se ejecutan
 app.use(logErrors);
+app.use(handleSQLError);
 app.use(boomErrorHandler);
 app.use(errorHandler)
 

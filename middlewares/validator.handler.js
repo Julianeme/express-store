@@ -5,8 +5,6 @@ function validatorHandler (schema, property){
     //Lo siguiente, permite de forma dinamica decirle al programa
     //donde esta la propiedad que queremos validar, como en el body (en caso de put, post)
     //o params en el caso de un get
-    console.log(`property: ${property}`)
-    console.log(`req: ${req}`)
     const data = req[property]
     const {error} = schema.validate(data, {abortEarly: false});
     if(error){

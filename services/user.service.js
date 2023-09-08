@@ -13,33 +13,39 @@ class UserService {
   }
 
   async create(data) {
-    return data;
+    const newUser = await models.User.create(data);
+    return {
+      id: newUser.id,
+      email: newUser.email
+    };
   }
 
   async find() {
-    const response = models.User.findAll();
+    const response = await models.User.findAll();
     return response;
   }
 
 
   async findOne(id) {
-    const query = `SELECT * FROM tasks WHERE id=${id}`;
-    const {rows} = await this.pool.query(query);
-    if(!rows[0]){
-      throw boom.notFound('Task Not Found');
+    const user = await models.User.findByPk(id);
+    if(!user){
+      throw boom.notFound('User Not Found');
     }
-    return rows[0];
+    return user;
   }
 
   async update(id, changes) {
+    const user = await this.findOne(id);
+    const updatedUser = await user.update(changes);
     return {
       id,
-      changes,
-    };
-  }
+      updatedUser};
+    }
 
   async delete(id) {
-    return { id };
+    const userToDelete = await this.findOne(id);
+    await userToDelete.destroy();
+    return id
   }
 }
 
