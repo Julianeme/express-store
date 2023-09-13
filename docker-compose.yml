@@ -31,3 +31,25 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       -  5050:80
+
+  #Will add another db, to test the ORM Agonosticity
+  mysql:
+    image: mysql:5
+    environment:
+      - MYSQL_DATABASE=my_store
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_PORT=3306
+    ports:
+      - 33061:3306
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  # And another graphic visor to check mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - MYSQL_DATABASE=my_store
+      - PMA_HOST=mysql #this host must be the name of the service to connect to
+    ports:
+      - 8080:80  #the port we want it to run on<-:->internal port in which it runs
