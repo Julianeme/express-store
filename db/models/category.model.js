@@ -17,10 +17,9 @@ const CategorySchema = {
     type: DataTypes.STRING,
     unique: false
   },
-  subcategory: {
-    allowNull: false,
+  image: {
     type: DataTypes.STRING,
-    unique: false
+    allowNull: false
   },
   createdAt: {
     allowNull: false,
@@ -31,8 +30,11 @@ const CategorySchema = {
 }
 
 class Category extends Model{
-  static associate(){
-
+  static associate(models){
+    this.hasMany(models.Product, {
+      as: 'products',
+      foreignKey: 'categoryId'
+    })
 }
   static config(sequelize){
     return{

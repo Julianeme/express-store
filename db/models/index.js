@@ -21,6 +21,9 @@ function setUpModels(sequelize){
   //here we associate the models passing the models to the associate function
   Customer.associate(sequelize.models)
   User.associate(sequelize.models)
+  Category.associate(sequelize.models)
+  Product.associate(sequelize.models)
+  Order.associate(sequelize.models)
 }
 
 module.exports = setUpModels;

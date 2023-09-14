@@ -14,12 +14,7 @@ class ProductsService{
   }
 
     async create(data){
-    const newProduct = {
-      id : faker.string.uuid(),
-      ...
-      data
-    }
-    this.products.push(newProduct)
+    const newProduct = await models.Product.create(data)
     return (newProduct)
   }
 
@@ -27,8 +22,10 @@ class ProductsService{
     // when we want to use a sql query we will use sequelize.query
     //const query = 'SELECT * FROM tasks'
     //const [data] = await sequelize.query(query)
-    const response = await models.Product.findAll()
-    return response;
+    const products = await models.Product.findAll({
+      include: ['category']
+    })
+    return products;
   }
 
   async findOne(id){

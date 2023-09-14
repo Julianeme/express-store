@@ -1,4 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CATEGORY_TABLE } = require('./category.model');
 
 //1-Table name
 const PRODUCT_TABLE = 'products';
@@ -16,17 +17,9 @@ const ProductSchema = {
     type: DataTypes.STRING,
     unique: false,
   },
-  quantity: {
+  image: {
     allowNull: false,
-    type: DataTypes.INTEGER,
-    unique: false,
-    defaultValue: 0
-    },
-  price: {
-    allowNull: false,
-    type: DataTypes.FLOAT,
-    unique: false,
-    defaultValue: 0
+    type: DataTypes.STRING,
     },
   description: {
     allowNull: false,
@@ -34,17 +27,38 @@ const ProductSchema = {
     unique: false,
     defaultValue: ''
   },
+  price: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+    allowNull: false
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
     defaultValue: Sequelize.NOW
+  },
+  //one to many relationship goes on the weak element, in this case: products model
+  categoryId:{
+    field: 'category_id',
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CATEGORY_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   }
 };
 
 class Product extends Model {
-  static associate() {
-    // associate
+  static associate(models) {
+    this.belongsTo(models.Category, {as: 'category'});
+    this.hasMany(models.Order, {
+      as: 'orders',
+      foreignKey: 'customerId'
+    })
   }
 
   static config(sequelize) {

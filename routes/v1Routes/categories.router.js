@@ -21,7 +21,20 @@ router.get('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const category = await service.findOne(id);
+      const category = await service.findOneCategory(id);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get('/:id/categoryProducts',
+  validatorHandler(getCategorySchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const category = await service.findAllProductsByCategoryId(id);
       res.json(category);
     } catch (error) {
       next(error);
