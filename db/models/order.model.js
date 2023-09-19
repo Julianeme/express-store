@@ -24,7 +24,21 @@ const OrderSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   },
-
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  total: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      if (this.items.length > 0) {
+        return this.items.reduce((total, item) => {
+          return total + (item.price * item.OrderProduct.amount)
+        }, 0)
+      }
+      return 0
+    }
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -35,7 +49,13 @@ const OrderSchema = {
 
 class Order extends Model {
   static associate(models) {
-    this.belongsTo(models.Customer, { as: 'customer' })
+    this.belongsTo(models.Customer, { as: 'customer' }),
+    this.belongsToMany(models.Product, {
+      as: 'items',
+      through: models.OrderProduct,
+      foreignKey: 'orderId',
+      otherKey: 'productId'
+    })
   }
 
   static config(sequelize) {
