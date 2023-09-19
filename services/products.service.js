@@ -4,6 +4,7 @@ const boom = require('@hapi/boom')
 // const pool = require('../libs/postgres.pool')
 // const sequelize = require('../libs/sequelize');
 const { models } = require('../libs/sequelize');
+const { query } = require('express');
 
 class ProductsService{
 
@@ -18,13 +19,21 @@ class ProductsService{
     return (newProduct)
   }
 
-  async find(){
+  async find(query){
     // when we want to use a sql query we will use sequelize.query
     //const query = 'SELECT * FROM tasks'
     //const [data] = await sequelize.query(query)
-    const products = await models.Product.findAll({
+    const options = {
       include: ['category']
-    })
+    };
+    const {limit, offset} = query
+    if(limit && offset){
+      {
+      options.limit =limit,
+      options.offset = offset
+    }};
+    console.log(options)
+    const products = await models.Product.findAll(options);
     return products;
   }
 

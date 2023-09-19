@@ -1,7 +1,7 @@
 const express = require('express');
 const ProductsService = require('../../services/products.service')
 const validatorHandler = require('../../middlewares/validator.handler')
-const { createProductSchema, updateProductSchema, getProductSchema } = require('../../schemas/products.schema')
+const { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } = require('../../schemas/products.schema')
 
 //ya que aca vamos a crear un router, usamos router."operacion"
 //en vez de app."operacion"
@@ -18,9 +18,11 @@ const service = new ProductsService();
 //   res.json(products)
 // });
 
-router.get('/', async (req, res) => {
+router.get('/',
+  validatorHandler(queryProductSchema, 'query'),
+  async (req, res) => {
   try {
-    const products = await service.find();
+    const products = await service.find(req.query);
     // Sending the HTML response
     res.send(products);
   } catch (error) {
