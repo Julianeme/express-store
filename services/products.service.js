@@ -5,6 +5,7 @@ const boom = require('@hapi/boom')
 // const sequelize = require('../libs/sequelize');
 const { models } = require('../libs/sequelize');
 const { query } = require('express');
+const { Op } = require('sequelize');
 
 class ProductsService{
 
@@ -24,7 +25,8 @@ class ProductsService{
     //const query = 'SELECT * FROM tasks'
     //const [data] = await sequelize.query(query)
     const options = {
-      include: ['category']
+      include: ['category'],
+      where: {}
     };
     const {limit, offset} = query
     if(limit && offset){
@@ -32,6 +34,17 @@ class ProductsService{
       options.limit =limit,
       options.offset = offset
     }};
+    const {price} = query
+    if(price){
+      options.where.price = price
+    }
+    const {price_min, price_max} = query
+    if(price_min && price_max){
+      options.where.price = {
+        [Op.gte]: price_min,
+        [Op.lte]: price_max
+      }
+    }
     console.log(options)
     const products = await models.Product.findAll(options);
     return products;
