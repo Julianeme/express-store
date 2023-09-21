@@ -45,7 +45,6 @@ class ProductsService{
         [Op.lte]: price_max
       }
     }
-    console.log(options)
     const products = await models.Product.findAll(options);
     return products;
   }

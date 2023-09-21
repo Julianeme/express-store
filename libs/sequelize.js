@@ -3,12 +3,21 @@ const { config } = require('./../config/config');
 //import setUpModels from '../db/models to set up models
 const setUpModels = require('./../db/models');
 
-const USER = encodeURIComponent(config.dbUser);
-const PASSWORD = encodeURIComponent(config.dbPassword);
+const options = {
+  dialect: 'postgres',
+    logging: config.isProd ? false : true,
+}
 
+if (config.isProd) {
+  options.dialectOptions = {
+    ssl: {
+      rejectUnauthorized: false
+    }
+  }
+}
 //to use the db with postgress use the following 2 lines of code
-const URI = `postgres://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
-const sequelize = new Sequelize(URI, {dialect: 'postgres', logging: false});
+
+const sequelize = new Sequelize(config.dbUrl, options);
 
 //to use the db with mysql use the following 2 lines of code
 //const URI = `mysql://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
