@@ -1,9 +1,13 @@
 const express = require('express');
+const session = require('express-session')
 const cors = require('cors')
 const routerApiV1 = require('./routes/v1Routes')
 const routerApiV2 = require('./routes/v2Routes')
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 const { handleSQLError } = require('./middlewares/queryError.handler');
+const {checkApiKey} = require('./middlewares/auth.handler')
+//const passport = require('passport')
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,13 +36,31 @@ const options = {
 //colocando el middleware de CORS aqui, sin whitelist ni options, dariamos accesso a nuestra app
 //a peticiones desde cualquier origen, esto es util para api publicas, no internas
 app.use(cors(options))
-
+//app.use(passport.initialize());
+//dynamic requiere, it will be executed
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true },
+  }),
+);
+require('./utils/auth')
 
 app.get('/', (req, res) => {
   res.send(`
   <h1>Express study home page</h1>
   <img src="/resources/images/bg_image_fullHD.jpg" alt="placeholder image" />
   `)
+});
+
+app.get('/nueva-ruta', checkApiKey,
+(req, res) => {
+  res.send(`
+  <h1>Nueva Ruta Test Page</h1>
+  <img src="/resources/images/bg_image_fullHD.jpg" alt="placeholder image" />
+  `);
 });
 
 
