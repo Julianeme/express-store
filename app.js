@@ -6,6 +6,7 @@ const routerApiV2 = require('./routes/v2Routes')
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 const { handleSQLError } = require('./middlewares/queryError.handler');
 const {checkApiKey} = require('./middlewares/auth.handler')
+const {config} = require('./config/config')
 //const passport = require('passport')
 
 
@@ -38,14 +39,6 @@ const options = {
 app.use(cors(options))
 //app.use(passport.initialize());
 //dynamic requiere, it will be executed
-app.use(
-  session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true },
-  }),
-);
 require('./utils/auth')
 
 app.get('/', (req, res) => {

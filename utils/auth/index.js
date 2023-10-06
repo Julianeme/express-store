@@ -5,4 +5,9 @@ const passport = require('passport');
 //1- Local Strategy
 const LocalStrategy = require('./strategies/local.startegy')
 
+//2- JWT Strategy
+
+const JwtStrategy = require('./strategies/jwt.strategy')
+
 passport.use(LocalStrategy);
+passport.use(JwtStrategy);
