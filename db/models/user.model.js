@@ -9,21 +9,26 @@ const UserSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   email: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true
+    unique: true,
   },
   password: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+  },
+  recoveryToken: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    field: 'recovery_token'
   },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: 'customer'
+    defaultValue: 'customer',
   },
   createdAt: {
     allowNull: false,
@@ -32,9 +37,9 @@ const UserSchema = {
     //how it will be inserted and created in the database
     //but for javascript manipulation we will use camelCase (createdAt)
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class User extends Model{
   static associate(models){
